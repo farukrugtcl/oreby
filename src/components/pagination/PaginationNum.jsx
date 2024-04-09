@@ -9,6 +9,8 @@ const PaginationNum = ({pageNumber,paginate,next,prev,currentPage}) => {
 
 <nav aria-label="Page navigation example">
   <ul class="flex items-center -space-x-px h-8 text-sm py-32 justify-center">
+
+    {pageNumber.length > 0 &&
     <li onClick={prev}>
       <a  class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-white bg-[#203340] border border-e-0 border-gray-300 rounded-s-lg  ">
         <span class="sr-only">Previous</span>
@@ -17,19 +19,21 @@ const PaginationNum = ({pageNumber,paginate,next,prev,currentPage}) => {
         </svg>
       </a>
     </li>
-
+}
     {pageNumber.map((item,i)=>(
+
 
 <li onClick={()=>paginate(item)} className={currentPage == i+1 ? 'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-[#414A97] border border-gray-300'  : 'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300'} >
 
 
 <a>{item + 1}</a>
 </li>
+
     ))}
 
 
    
-    
+{pageNumber.length > 0 &&
     <li onClick={next}>
       <a  class="flex items-center justify-center px-3 h-8 leading-tight text-white bg-[#203340] border border-gray-300 rounded-e-lg ">
         <span class="sr-only">Next</span>
@@ -38,6 +42,7 @@ const PaginationNum = ({pageNumber,paginate,next,prev,currentPage}) => {
         </svg>
       </a>
     </li>
+}
   </ul>
 </nav>
 <nav aria-label="Page navigation example">

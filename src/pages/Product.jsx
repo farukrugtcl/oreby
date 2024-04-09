@@ -8,10 +8,6 @@ import Img from '../assets/Img_2 (4).png'
 import { Apidata } from '../components/ContexApi';
 import Post from '../components/pagination/Post';
 import PaginationNum from '../components/pagination/PaginationNum';
-import { FaPlus } from "react-icons/fa6";
-import { FiMinus } from "react-icons/fi";
-
-
 
 
 const Product = () => {
@@ -20,14 +16,12 @@ const Product = () => {
 
     let [currentPage, setCurrentPage] = useState(1)
     let [perPage, setPerPage] = useState(6)
-
-    let [showIcon, setShowIcon] = useState(false)
-    let [show,setShow] = useState(false)
-
-    let cat2 =useRef()
+    let [category, setCategory] = useState([])
+    let [cateFilter, setCateFilter] = useState([])
+  
 
     let pageNumber =[]
-    for(let i= 0; i < Math.ceil(data.length / perPage); i++){
+    for(let i= 0; i < Math.ceil(cateFilter.length > 0 ? cateFilter : data.length / perPage); i++){
         pageNumber.push(i)
     }
 
@@ -52,22 +46,19 @@ const Product = () => {
       }
     }
 
-    useEffect(()=>{
-      document.addEventListener('click',(e)=>{
-  
-           
-           if(cat2 ?.current ?.contains(e.target)== true){
-            setShow(!show)
-            setShowIcon(!showIcon)
-  
-           }else{
-            setShow(false)
-            setShowIcon(false)
-           }                          
-           
-      })
-     },[show])
     
+    useEffect(()=>{
+
+      setCategory([...new Set(data.map((item)=>item.category))])
+    },[data])
+
+      let handleCategory = (citem)=>{
+
+      let categoryFilter = data.filter((item)=>item.category == citem)
+
+      setCateFilter(categoryFilter);
+  }
+
 
   return (
 
@@ -79,27 +70,24 @@ const Product = () => {
     <div className="w-[20%]">
     
     <h2 className='font-dm text-[#262626] font-bold text-[20px] pt-4'>Shop by Category</h2>
-   <div ref={cat2} className="flex justify-between items-center">
-    <h3 className='font-dm text-[#262626] font-bold text-[16px] pt-2'>Category 1</h3>
-    
-    {showIcon ? <FiMinus /> : <FaPlus />}  
-   
-   </div>
-   {show && 
-   <ul className='bg-[gray]'>
-    <li className='font-dm text-[#000] font-bold text-[16px]  pt-2'>Category one</li>
-    <li className='font-dm text-[#000] font-bold text-[16px] pt-2'>Category two</li>
-    <li className='font-dm text-[#000] font-bold text-[16px] pt-2'>Category three</li>
-    <li className='font-dm text-[#000] font-bold text-[16px] pt-2'>Category four</li>     
-   </ul>
-    }
+   <div  className="flex justify-between items-center">
+    <ul>
+ 
+    {category.map((item,i)=>(
 
+      <li onClick={()=>handleCategory(item)} key={i} className='font-dm text-[#262626] font-bold text-[16px] pt-2'>{item}</li>
+    ))}
+ 
+    </ul>      
+      
+   </div>
+ 
     </div>
     <div className="w-[80%]">
 
         <div className="flex justify-between flex-wrap">
 
-         <Post post={allPage}/>
+         <Post post={allPage} cateFilter = {cateFilter}/>
             
     </div>
     <PaginationNum pageNumber={pageNumber} paginate={paginate} next={next} prev={prev} currentPage={currentPage}/>
